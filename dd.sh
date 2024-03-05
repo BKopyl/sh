@@ -5,9 +5,9 @@ git config --global --add safe.directory /home/ec2-user/ml-cluster
 
 TARGET_DIR="$1"
 REPO_URL="git@github.com:BKopyl/ml-cluster.git"
-MAIN_BRANCH="$3"
-SCRIPT_PATH="$4"
-GITHUB_TOKEN="$5"
+MAIN_BRANCH="$2"
+SCRIPT_PATH="$3"
+GITHUB_TOKEN="$4"
 
 # Создание целевой директории
 mkdir -p "$TARGET_DIR"
