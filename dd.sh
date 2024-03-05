@@ -3,10 +3,11 @@
 # Установка безопасных директорий для Git
 git config --global --add safe.directory /home/ec2-user/ml-cluster
 
-TARGET_DIR="${1:-/home/ec2-user/ml-cluster}"
-REPO_URL="${2:-git@github.com:BKopyl/ml-cluster.git}"
-MAIN_BRANCH="${3:-main}"
-SCRIPT_PATH="${4:-/home/ec2-user/ml-cluster/s3-run.sh}"
+TARGET_DIR="$1"
+REPO_URL="$2"
+MAIN_BRANCH="$3"
+SCRIPT_PATH="$4"
+GITHUB_TOKEN="$5"
 
 # Создание целевой директории
 mkdir -p "$TARGET_DIR"
