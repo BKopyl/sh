@@ -5,7 +5,6 @@ TARGET_DIR="$1"
 MAIN_BRANCH="$2"
 SCRIPT_NAME="$3"
 GITHUB_TOKEN="$4"
-SCRIPT_NAME="$5"
 
 # Путь к скрипту для скачивания
 SCRIPT_URL="https://raw.githubusercontent.com/BKopyl/ml-cluster/$MAIN_BRANCH/$SCRIPT_NAME"
