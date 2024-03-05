@@ -1,51 +1,23 @@
 #!/bin/bash
 
-# Установка безопасных директорий для Git
-git config --global --add safe.directory /home/ec2-user/ml-cluster
-
+# Принимаемые аргументы
 TARGET_DIR="$1"
-REPO_URL="git@github.com:BKopyl/ml-cluster.git"
 MAIN_BRANCH="$2"
-SCRIPT_PATH="$3"
+SCRIPT_NAME="$3"
 GITHUB_TOKEN="$4"
+SCRIPT_NAME="$5"
 
-# Создание целевой директории
-mkdir -p "$TARGET_DIR"
+# Путь к скрипту для скачивания
+SCRIPT_URL="https://raw.githubusercontent.com/BKopyl/ml-cluster/$MAIN_BRANCH/$SCRIPT_NAME"
 
-cd "$TARGET_DIR" || exit
+# Скачивание скрипта с использованием токена для аутентификации
+curl -H "Authorization: token $GITHUB_TOKEN" -L $SCRIPT_URL -o "$TARGET_DIR/$SCRIPT_NAME"
 
-# Инициализация Git репозитория, если необходимо
-if [ ! -d ".git" ]; then
-    git init
-fi
-
-# Настройка удаленного репозитория
-if git remote get-url origin &>/dev/null; then
-    git remote set-url origin "$REPO_URL"
+if [ $? -eq 0 ]; then
+    echo "Скрипт $SCRIPT_NAME успешно скачан."
+    chmod +x "$TARGET_DIR/$SCRIPT_NAME"
+    # Выполнение скачанного скрипта
+    "$TARGET_DIR/$SCRIPT_NAME"
 else
-    git remote add origin "$REPO_URL"
-fi
-
-export GIT_SSH_COMMAND="ssh -o StrictHostKeyChecking=no"
-
-# Получение данных из репозитория
-git fetch
-
-# Переключение на основную ветку
-if git branch --list "$MAIN_BRANCH" &>/dev/null; then
-    git checkout "$MAIN_BRANCH"
-else
-    git checkout -b "$MAIN_BRANCH" --track "origin/$MAIN_BRANCH"
-fi
-
-git pull
-
-echo "Клонирование в $TARGET_DIR завершено."
-
-# Проверка и выполнение s3-run.sh
-if [ -f "$SCRIPT_PATH" ]; then
-    chmod +x "$SCRIPT_PATH"
-    bash "$SCRIPT_PATH"
-else
-    echo "Скрипт $SCRIPT_PATH не найден."
+    echo "Ошибка при скачивании $SCRIPT_NAME с GitHub."
 fi
